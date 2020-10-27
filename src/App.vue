@@ -6,23 +6,21 @@
         <router-link to="default"><a-button class="linkButton">概述</a-button></router-link>
         <h1>使用schematics创建的页面</h1>
         <div style="text-align:left;" id="routelinkContainer">
-        <router-link to="template"><a-button class="linkButton">默认页面</a-button></router-link>  
+        <router-link to="template"><a-button class="linkButton">默认页面</a-button></router-link>
         </div>
         <h1>使用schematics创建的表单</h1>
         <div style="text-align:left;" id="formModalContainer">
           <a-button class="linkButton" @click="openModal('defaultForm')">默认表单</a-button>
           </div>
       </a-col>
-      <a-col :span="16" id="formModalContainer" style="padding:20px;">
+      <a-col :span="16"  style="padding:20px;">
           <router-view/>
       </a-col>
     </a-row>
     </div>
     <template id="formContainer">
       <default-form ref="defaultForm"></default-form>
-          <my-form ref="myForm"></my-form> 
-        <my-form ref="myForm"></my-form> 
-      </template>     
+      </template>
   </div>
 </template>
 <script lang="ts">
@@ -39,7 +37,7 @@ import DefaultForm from './components/form/defaultForm.vue';
     created(){
     }
     mounted(){
-    
+
     }
 
     openModal(formName:string){
