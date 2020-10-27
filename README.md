@@ -1,10 +1,3 @@
-# vue-schematics-demo
-
-## Project setup
-```
-npm install
-```
-
 # 操作步骤
 * `npm i`安装依赖
 * `npm run compile`监听并编译schematics文件
