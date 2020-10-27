@@ -1,0 +1,13 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "page": {
+      "description": "page schematic.",
+      "factory": "./page/index#Page"
+    },
+    "form": {
+      "description": "form schematic.",
+      "factory": "./form/index#Form"
+    }
+  }
+}

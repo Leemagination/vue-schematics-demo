@@ -1,0 +1,45 @@
+<template>
+  <div>
+    <div class="searchBar">
+      <%
+      searchBar.forEach(item=>{
+        %>
+      <search-item :label="'<%= item.label%>'">
+        <%
+        switch(item.type){
+           case 'textInput':
+          %><a-input :placeholder="'<%= item.placeHolder%>'" v-model="searchParams.<%= item.model%>" style="width: <%= item.width?item.width:120%>px" /><% 
+          break;
+          case 'numberInput':
+          %><a-input-number :placeholder="'<%= item.placeHolder%>'" v-model="searchParams.<%= item.model%>" style="width: <%= item.width?item.width:120%>px" <%if(item.min!==undefined){%>:min=<%=item.min%><%}%>  <%if(item.max!==undefined){%>:max=<%=item.max%><%}%> /><%
+          break;
+          case 'date':
+          %><a-date-picker :placeholder="'<%= item.placeHolder%>'" v-model="searchParams.<%= item.model%>" style="width: <%= item.width?item.width:120%>px" /><%
+          break;
+          case 'select':
+          %><a-select style="width: <%= item.width?item.width:120%>px" allowClear :placeholder="'<%= item.placeHolder%>'"  mode="<%=item.multi?'multiple':'single'%>"  v-model="searchParams.<%= item.model%>">
+          <a-select-option v-for="item in <%= item.model%>List" :value="item.value" :key="item.value">
+            {{ item.label }}
+          </a-select-option>
+        </a-select><%
+          break;
+        }
+        %>
+      </search-item><%})%>
+      <div style="text-align: right">
+        <a-button type="primary" @click="search"> 搜索 </a-button>
+        <a-button type="default" @click="reset"> 重置 </a-button>
+      </div>
+    </div>
+    <div>搜索参数:{{searchParams}}</div>
+    <div>
+      <a-table :columns="columns" :data-source="data" >
+      </a-table>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" src="./<%= name%>Page.ts">
+</script>
+<style scoped src="./<%= name%>Page.css">
+</style>

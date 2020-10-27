@@ -1,0 +1,165 @@
+<template>
+  <div>
+    <a-modal
+      title="<%= name%>表单"
+      :visible="visible"
+      :maskClosable="false"
+      okText="确认"
+      cancelText="关闭"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    >
+      <div style="overflow: auto; max-height: 560px">
+        <a-form-model
+          ref="<%= name%>Form"
+          :model="form"
+          :rules="rules"
+          :label-col="labelCol"
+          :wrapper-col="wrapperCol"
+        >
+<%
+        formItem.forEach(item=>{
+%>        <a-form-model-item label="<%= item.label%>" prop="<%= item.prop%>"><%
+            switch(item.type){
+                case 'textInput':
+                %>
+                <a-input v-model="form.<%= item.prop%>" placeholder="<%= item.placeHolder%>" /><%
+                break;
+                case 'numberInput':
+                %>
+                <a-input-number placeholder="<%= item.placeHolder%>" v-model="form.<%= item.prop%>"  <%if(item.length.min!==undefined){%>:min=<%=item.length.min%><%}%>  <%if(item.length.max!==undefined){%>:max=<%=item.length.max%><%}%> /><%
+                break;
+                case 'date':
+                %>
+                <a-date-picker v-model="form.<%=item.prop%>" show-time
+                    type="date"  placeholder="<%=item.placeHolder%>"/><%
+                break;
+                case 'switch':
+                %>
+                <a-switch checked-children="<%=item.trueText%>" un-checked-children="<%=item.falseText%>" v-model="form.<%= item.prop%>" /><%break;
+                case 'radio':
+                %>
+                <a-radio-group v-model="form.<%=item.prop%>"><%
+                    item.options.forEach(val=>{
+                      %>
+                    <a-radio value="<%=quote(val.value)%>"><%=val.label%></a-radio><%  
+                    })
+                %>
+                </a-radio-group><%
+                break;
+                case 'checkBox':
+                %>
+                <a-checkbox-group v-model="form.<%=item.prop%>"><%
+                    item.options.forEach(val=>{
+                      %>
+                    <a-checkbox value="<%=quote(val.value)%>" name="<%=item.prop%>"><%=val.label%></a-checkbox><%  
+                    })
+                %>
+                </a-checkbox-group><%
+                break;
+                case 'select':
+                %>
+                <a-select allowClear placeholder="<%= item.placeHolder%>"  mode="<%=item.multi?'multiple':'single'%>"  v-model="form.<%= item.prop%>"><%
+                    item.options.forEach(val=>{
+                      %>
+                    <a-select-option  :value="<%=quote(val.value)%>" :key="<%=quote(val.value)%>"><%=val.label%></a-select-option><%  
+                    })
+                %>
+                </a-select><%
+                break;
+            }
+        %>
+        </a-form-model-item>
+        <% 
+        })
+        %>
+        </a-form-model>
+      </div>
+    </a-modal>
+  </div>
+</template>
+
+<script lang="ts">
+import Component from "vue-class-component";
+import { Prop, Vue } from "vue-property-decorator";
+
+@Component({
+  components: {},
+})
+export default class <%= classify(name)%>Form extends Vue {
+  visible = false;
+  labelCol = { span: 8 };
+  wrapperCol = { span: 14 };
+  form: any = {
+    <%
+    formItem.forEach((item,index)=>{
+    %><%=item.prop%>: <%=item.type==='select'?'[]':item.type==='switch'?'false':'null'%><%=formItem.length-1!==index?',':''%>
+    <%
+    })
+  %>};
+  rules: any = {
+    <%
+    formItem.forEach((item,index)=>{
+    %><%=item.prop%>: [<%
+        if(item.required){           
+    %>
+        {
+            required: true,
+            message: "<%=item.required%>",
+            trigger: "<%= item.type.indexOf('Input')!==-1?'blur':'change'%>"
+        },<%}
+        if(item.length&&item.type!=='numberInput'){
+    %>
+        {
+           min: <%=item.length.min%>,
+           max: <%=item.length.max%>,
+           message: "<%=item.length.message%>" ,
+           trigger: "<%= item.type.indexOf('Input')!==-1?'blur':'change'%>"
+        },<%}  
+        if(item.pattern){
+    %>
+        {
+           pattern: <%= item.pattern.reg%>,
+           message: "<%= item.pattern.message%>",
+           trigger: "<%= item.type.indexOf('Input')!==-1?'blur':'change'%>" 
+        },<%        
+        }      
+    %>],
+    <%
+    })
+  %>
+  };
+
+  showModal() {
+    this.visible = true;
+  }
+
+  handleOk() {
+    const form: any = this.$refs.<%= name%>Form;
+    form.validate((valid: any) => {
+      if (valid) {
+        this.openNotificationWithIcon(JSON.stringify(this.form));
+        this.handleCancel();
+      } else {
+        console.log("error submit!!");
+        return false;
+      }
+    });
+  }
+
+  handleCancel() {
+    const form: any = this.$refs.<%= name%>Form;
+    form.resetFields();
+    this.visible = false;
+  }
+
+  openNotificationWithIcon(jsonStr: string) {
+    this.$notification["success"]({
+      message: "成功",
+      description: jsonStr,
+    });
+  }
+}
+</script>
+<style scoped>
+</style>

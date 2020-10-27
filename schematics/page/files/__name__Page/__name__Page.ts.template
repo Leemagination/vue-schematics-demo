@@ -1,0 +1,44 @@
+import Component from 'vue-class-component'
+import {Vue} from 'vue-property-decorator'
+import SearchParams from "./searchParams"
+@Component({
+  components: {
+   
+  }
+})
+export default class <%= classify(name)%>Page extends Vue {
+  Mock = require('mockjs')
+  searchParams = new SearchParams()<%
+  searchBar.filter(item=>item.type==='select').forEach(item=>{
+%>
+  <%=item.model%>List = [<%item.options.forEach((val,index)=>{
+    %>
+    { value: <%=quote(val.value)%>,label: '<%=val.label%>' }<%=index<item.options.length-1?',':'\n'%><%
+})%>]<%})%>
+
+  columns = [<%
+        tableConfig.forEach((item,index)=>{%>   
+{ title:'<%= item.title%>',dataIndex:'<%= item.model%>',ellipsis: true,}<%=index<tableConfig.length-1?',':'\n'%><%})%>];
+  data: any = [];
+  created() {
+  }
+  search() {
+    console.log(this.searchParams.getParams());
+    const count = Math.floor(Math.random() * 40 + 20)
+    const arr = []
+    for (let i = 1; i <= count; i++) {
+      arr.push({<%
+        tableConfig.forEach(item=>{
+          %>
+          <%=item.model%>:this.Mock.mock('@cparagraph'),<%
+        })
+        %>
+          key:i
+      })
+    }
+    this.data = arr;
+  }
+  reset() {
+    this.searchParams.reset();
+  }
+}

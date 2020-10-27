@@ -1,0 +1,39 @@
+class SearchParams {
+    <%  searchBar.forEach(item=>{
+        %><%= item.model
+        %>: <%
+        switch(item.type){
+          case 'textInput':%>string<%
+          break;
+          case 'numberInput':%>number<%
+          break;
+          case 'date':%>Date<%
+          break;
+          case 'select':
+          if(item.multi){
+             %>number|string<% 
+          }else{
+              %>number[]|string[]<%
+          }
+          break;
+      }
+      %>;
+    <%
+      })
+    %>
+    constructor() {
+      this.reset()
+    }
+
+    getParams() {
+        return JSON.parse(JSON.stringify(this))
+    }
+
+    reset() {
+        for (const prop in this) {
+            this[prop] = undefined;
+        }
+    }
+}
+
+export default SearchParams
