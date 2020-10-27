@@ -13,7 +13,7 @@ function updateRoute() {
     const routePath = './src/router/index.ts'
     const routeFile = tree.get(routePath)
     const recorder = tree.beginUpdate(routePath);
-    const matchStr = routeFile?.content.toString().match(/Array<RouteConfig>(?:.|\n)*?(?=])/)
+    const matchStr = routeFile?.content.toString().match(/Array<RouteConfig>(?:.|\s)*?(?=])/)
     const addRouteStr = ` ,{
       path: '/${config.name}',
       name: '${config.name}',
@@ -33,7 +33,7 @@ function updateApp() {
     const appPath = './src/App.vue'
     const appFile = tree.get(appPath)
     const recorder = tree.beginUpdate(appPath)
-    const matchStr = appFile?.content.toString().match(/id="routelinkContainer"(?:.|\n)*?(?=<\/div>)/)
+    const matchStr = appFile?.content.toString().match(/id="routelinkContainer"(?:.|\s)*?(?=<\/div>)/)
     const addAppStr = `<router-link to="${config.name}"><a-button class="linkButton">${config.name}</a-button></router-link> 
         `
     if (matchStr) {

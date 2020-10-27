@@ -12,6 +12,11 @@ const routes: Array<RouteConfig> = [
     path: '/default',
     name: 'default',
     component: () => import(/* webpackChunkName: "default" */ '../views/defaultPage/defaultPage.vue')
+  },
+  {
+        path: '/template',
+        name: 'template',
+        component: () => import(/* webpackChunkName: "template" */ '../views/templatePage/defaultPage.vue')
   }
 ]
 
